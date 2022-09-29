@@ -1,5 +1,6 @@
 import type { AppProps } from "next/app";
 import NextNProgress from "nextjs-progressbar";
+import { useEffect, useState } from "react";
 import { ThemeProvider } from "styled-components";
 
 import GlobalStyles from "@/config/styles/global";
@@ -8,15 +9,20 @@ import { wrapper } from "@/features/Redux/store";
 import { Navbar } from "@/src/components";
 
 function App({ Component, pageProps }: AppProps) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <NextNProgress
-        color={theme.colors.lightBlue}
-        options={{ showSpinner: false }}
+        color={theme.colors.mainColor3}
+        options={{ showSpinner: true }}
       />
-      <Navbar />
-      <Component {...pageProps} />
+      <div style={{ visibility: !mounted ? "hidden" : "visible" }}>
+        <Navbar />
+        <Component {...pageProps} />
+      </div>
     </ThemeProvider>
   );
 }

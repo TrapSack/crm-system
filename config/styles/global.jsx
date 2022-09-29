@@ -20,8 +20,8 @@ export default createGlobalStyle`
     3. Allow percentage-based heights in the application
   */
   html, body {
-    font-family: ${(p) => p.theme.fonts.Inter};
     font-size: 14px;
+    font-family: Poppins,ui-sans-serif,system-ui,-apple-system,Arial;
   }
 
   /*
@@ -33,15 +33,6 @@ export default createGlobalStyle`
   body {
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
-    background-color: ${(p) => p.theme.colors.gray};
-  }
-
-  body.overflow {
-    overflow: hidden;
-  }
-
-  body.account {
-    background-color: ${(p) => p.theme.colors.white};
   }
 
   /*
@@ -86,8 +77,6 @@ export default createGlobalStyle`
   }
 
   h1, h2, h3 {
-    font-family: ${(p) => p.theme.fonts.Sohne};
-    color: ${(p) => p.theme.colors.blueCharcoal};
     text-transform: uppercase;
   }
 
@@ -107,8 +96,6 @@ export default createGlobalStyle`
   }
 
   h4 {
-    font-family: ${(p) => p.theme.fonts.Inter};
-    color: ${(p) => p.theme.colors.blueCharcoal};
     font-size: 22px;
     font-weight: 500;
     line-height: 1.2;

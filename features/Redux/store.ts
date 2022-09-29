@@ -1,12 +1,14 @@
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
 
+import boardsReducer from "./slices/boardsSlice";
 import themeReducer from "./slices/theme-slice";
 
 const makeStore = () =>
   configureStore({
     reducer: {
       theme: themeReducer,
+      boards: boardsReducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({ serializableCheck: false }),
@@ -24,4 +26,4 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   Action<string>
 >;
 
-export const wrapper = createWrapper<RootStore>(makeStore);
+export const wrapper = createWrapper<RootStore>(makeStore, { debug: true });
