@@ -51,7 +51,11 @@ export default function CRMCol({
                         color={board.titleColor}
                       />
                     ))}
-                  {snapshot.isDraggingOver && <ItemSceleton>+</ItemSceleton>}
+                  {snapshot.isDraggingOver && (
+                    <ItemSkeleton isDoubleMargin={items.length >= 1}>
+                      +
+                    </ItemSkeleton>
+                  )}
                   {provided.placeholder}
                 </ItemsContainer>
               )}
@@ -63,7 +67,7 @@ export default function CRMCol({
   );
 }
 
-const ItemSceleton = styled.div`
+const ItemSkeleton = styled.div<{ isDoubleMargin: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -76,6 +80,11 @@ const ItemSceleton = styled.div`
   opacity: 0.8;
   animation: open 0.2s alternate;
   border-radius: 3px;
+  ${({ isDoubleMargin }) =>
+    isDoubleMargin &&
+    css`
+      margin-top: 125px;
+    `}
 
   @keyframes open {
     0% {
@@ -101,7 +110,7 @@ const ColContainer = styled.div`
   display: flex;
   flex-direction: column;
   /* width: 250px; */
-  min-width: 250px;
+  min-width: 300px;
   height: 100%;
   margin-right: 2px;
 `;

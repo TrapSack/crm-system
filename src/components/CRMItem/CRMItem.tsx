@@ -36,31 +36,34 @@ const CRMItemMemo = ({
           if (snapshot.isDragging) setShowModal(false);
 
           return (
-            <ColItemContainer
-              {...provided.draggableProps}
-              {...provided.dragHandleProps}
-              ref={provided.innerRef}
-              isDragging={snapshot.isDragging}
-              onClick={() => setShowModal(!showModal)}
-              color={color}
-            >
-              <div>
-                <ItemName>{item.name}</ItemName>
-                <UpperContainer>
-                  <PriceContainer>
-                    {item.price} {item.currency}
-                  </PriceContainer>
-                  <FlickingText className={textClass}>
-                    {item.status}
-                  </FlickingText>
-                </UpperContainer>
-                <DateContainer>{getDate(item.date)}</DateContainer>
+            <>
+              <ColItemContainer
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+                ref={provided.innerRef}
+                isDragging={snapshot.isDragging}
+                onClick={() => setShowModal(!showModal)}
+                color={color}
+              >
                 <div>
-                  Client{item.client.length > 1 && "s"}:{" "}
-                  {item.client.map((client) => client.name)}
+                  <ItemName>{item.name}</ItemName>
+                  <UpperContainer>
+                    <PriceContainer>
+                      {item.price} {item.currency}
+                    </PriceContainer>
+                    <FlickingText className={textClass}>
+                      {item.status}
+                    </FlickingText>
+                  </UpperContainer>
+                  <DateContainer>{getDate(item.date)}</DateContainer>
+                  <div>
+                    Client{item.client.length > 1 && "s"}:{" "}
+                    {item.client.map((client) => client.name)}
+                  </div>
                 </div>
-              </div>
-            </ColItemContainer>
+              </ColItemContainer>
+              {snapshot.isDraggingOver && <div>ASFLASPFASPLGPAS</div>}
+            </>
           );
         }}
       </Draggable>
