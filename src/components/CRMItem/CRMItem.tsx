@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Draggable } from "react-beautiful-dnd-next";
-import styled, { css, keyframes } from "styled-components";
+import styled, { css } from "styled-components";
 
 import { getDate } from "@/features/helpers/getDate";
 import { IDeal } from "@/models/single-deal";
@@ -32,10 +32,6 @@ const CRMItemMemo = ({
               isDragging={snapshot.isDragging}
               onClick={() => setShowModal(!showModal)}
               color={color}
-              style={{
-                ...provided.draggableProps.style,
-                transitionDuration: `0.001s`,
-              }}
             >
               <div>
                 <ItemName>{item.name}</ItemName>

@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd-next";
 import styled, { css } from "styled-components";
 
 import { AddItemComponent, CRMItem } from "@/src/components";
 
+import ColumnTitle from "./components/ColumnTitle";
 import { ICRMColProps } from "./interfaces";
 
-export default function CRMCol({
+function CRMColMemo({
   board = null,
   items = null,
   index = null,
+  onChangeColTitle = null,
+  addNewBoard = null,
 }: ICRMColProps) {
   return (
     <Draggable draggableId={board.id} index={index}>
@@ -20,18 +23,13 @@ export default function CRMCol({
             {...provided.draggableProps}
             ref={provided.innerRef}
           >
-            <ColTitle {...provided.dragHandleProps}>
-              <TitleText
-                isDragging={snapshot.isDragging}
-                titleColor={board.titleColor}
-              >
-                {board.title}
-              </TitleText>
-              <Triangle
-                isDragging={snapshot.isDragging}
-                titleColor={board.titleColor}
-              />
-            </ColTitle>
+            <ColumnTitle
+              addNewBoard={addNewBoard}
+              board={board}
+              provided={provided}
+              snapshot={snapshot}
+              onChangeColTitle={onChangeColTitle}
+            />
             <TotalPrice>
               {items.reduce((acc, item) => acc + item.price, 0)} BYN
             </TotalPrice>
@@ -55,10 +53,6 @@ export default function CRMCol({
                           color={board.titleColor}
                         />
                       ))}
-
-                    {snapshot.isDraggingOver && (
-                      <ItemSkeleton isDoubleMargin={items.length >= 1} />
-                    )}
                     {provided.placeholder}
                   </ItemsContainer>
                 )}
@@ -70,6 +64,10 @@ export default function CRMCol({
     </Draggable>
   );
 }
+
+const CrmCol = memo(CRMColMemo);
+
+export default CrmCol;
 
 const AddItemContainer = ({ boardType }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -92,42 +90,6 @@ const AddItemContainer = ({ boardType }) => {
   );
 };
 
-const ItemSkeleton = styled.div<{ isDoubleMargin: boolean }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100px;
-  background: ${({ theme }) => theme.colors.transparentItem};
-  opacity: 0.8;
-  animation: open 0.2s alternate;
-  border-radius: 3px;
-  ${({ isDoubleMargin }) =>
-    isDoubleMargin &&
-    css`
-      margin-top: 125px;
-    `}
-
-  @keyframes open {
-    0% {
-      height: 10px;
-    }
-
-    100% {
-      height: 100px;
-    }
-  }
-`;
-
-const ColTitle = styled.div`
-  display: flex;
-  position: relative;
-  width: calc(100% + 10px);
-  height: 30px;
-  transition: background-color 0.1s ease-in;
-  border-radius: 4px;
-`;
-
 const ColContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -145,32 +107,8 @@ const ItemsContainer = styled.div<{ isDraggingOver: boolean }>`
   ${({ isDraggingOver }) =>
     isDraggingOver &&
     css`
-      /* background: #ffffff22; */
+      background: #ffffff22;
     `}
-`;
-
-const Triangle = styled.div<{ isDragging: boolean; titleColor: string }>`
-  position: relative;
-  width: 10px;
-  height: 0;
-  border-style: solid;
-  border-radius: 0 0 0 0;
-  border-width: 15px 10px 15px 10px;
-  border-color: transparent transparent transparent
-    ${({ titleColor }) => titleColor};
-  transition: opacity 0.2s ease-in;
-  opacity: ${({ isDragging }) => (isDragging ? 0.8 : 1)};
-`;
-
-const TitleText = styled.div<{ isDragging: boolean; titleColor: string }>`
-  display: flex;
-  align-items: center;
-  background-color: ${({ titleColor }) => titleColor};
-  transition: opacity 0.2s ease-in;
-  opacity: ${({ isDragging }) => (isDragging ? 0.8 : 1)};
-  height: 100%;
-  padding-left: 10px;
-  width: calc(100%);
 `;
 
 const TotalPrice = styled.div`

@@ -138,6 +138,32 @@ const boardsSlice = createSlice({
     updateBoards(state, action: PayloadAction<IInitialState>) {
       return action.payload;
     },
+    addBoard(
+      state,
+      action: PayloadAction<{ newBoardsOrder: string[]; board: IBoard }>
+    ) {
+      return {
+        ...state,
+        boards: [...state.boards, action.payload.board],
+        boardsOrder: action.payload.newBoardsOrder,
+      };
+    },
+    updateBoardTitle(
+      state,
+      action: PayloadAction<{ id: string; title: string }>
+    ) {
+      return {
+        ...state,
+        boards: state.boards.map((board) =>
+          board.id === action.payload.id
+            ? {
+                ...board,
+                title: action.payload.title,
+              }
+            : board
+        ),
+      };
+    },
     addItemToBoard(state, action: PayloadAction<IDeal>) {
       return {
         ...state,
@@ -162,4 +188,5 @@ const boardsSlice = createSlice({
 });
 
 export default boardsSlice.reducer;
-export const { updateBoards, addItemToBoard } = boardsSlice.actions;
+export const { updateBoards, addItemToBoard, addBoard, updateBoardTitle } =
+  boardsSlice.actions;

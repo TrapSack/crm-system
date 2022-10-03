@@ -1,9 +1,15 @@
+import { nanoid } from "nanoid";
 import React from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd-next";
 import styled from "styled-components";
 
 import { useAppDispatch, useSelector } from "@/features/hooks";
-import { updateBoards } from "@/features/Redux/slices/boardsSlice";
+import {
+  addBoard,
+  updateBoards,
+  updateBoardTitle,
+} from "@/features/Redux/slices/boardsSlice";
+import { IBoard } from "@/models/board";
 import { CRMCol } from "@/src/components";
 
 export default function CRMTable() {
@@ -106,6 +112,31 @@ export default function CRMTable() {
     );
   };
 
+  const addNewBoard = (prevBoardId: string) => {
+    const prevBoardIndex = boards.boardsOrder.findIndex(
+      (item) => item === prevBoardId
+    );
+
+    const newBoardId = nanoid();
+
+    const newBoard: IBoard = {
+      id: newBoardId,
+      items: [],
+      title: `Board #${newBoardId}`,
+      type: newBoardId,
+      titleColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+    };
+
+    const newBoardsOrder = [...boards.boardsOrder];
+
+    newBoardsOrder.splice(prevBoardIndex + 1, 0, newBoard.id);
+
+    dispatch(addBoard({ board: newBoard, newBoardsOrder }));
+  };
+
+  const onChangeColTitle = (id, title) =>
+    dispatch(updateBoardTitle({ id, title }));
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="all-cols" direction="horizontal" type="column">
@@ -119,7 +150,14 @@ export default function CRMTable() {
               }));
 
               return (
-                <CRMCol key={boardId} board={brd} items={items} index={index} />
+                <CRMCol
+                  key={boardId}
+                  board={brd}
+                  items={items}
+                  index={index}
+                  addNewBoard={addNewBoard}
+                  onChangeColTitle={onChangeColTitle}
+                />
               );
             })}
             {provided.placeholder}

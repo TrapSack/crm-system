@@ -6,13 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { nanoid } from "nanoid";
-import React, {
-  Dispatch,
-  memo,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
+import React, { Dispatch, memo, SetStateAction, useState } from "react";
 import styled from "styled-components";
 
 import theme from "@/config/styles/theme";
