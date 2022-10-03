@@ -21,6 +21,7 @@
   },
   "rules": {
     "react/jsx-boolean-value": 2,
+    "react-hooks/exhaustive-deps": 0,
     "react/jsx-curly-brace-presence": [
       2,
       {
