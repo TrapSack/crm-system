@@ -1,5 +1,6 @@
 import {
   faCircleArrowRight,
+  faMinus,
   faPen,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
@@ -58,6 +59,9 @@ export default function ColumnTitle({
         <TriangleBadge onClick={() => addNewBoard(board.id)}>
           <FontAwesomeIcon icon={faPlus} />
         </TriangleBadge>
+        <TriangleBadge onClick={() => addNewBoard(board.id)}>
+          <FontAwesomeIcon icon={faMinus} />
+        </TriangleBadge>
       </Triangle>
     </ColTitle>
   );
@@ -105,13 +109,13 @@ const TriangleBadge = styled.div`
   justify-content: center;
   border-radius: 50%;
   position: absolute;
-  transform: translate(-13px, -15px);
   background: #fff;
   opacity: 0.7;
   font-weight: bold;
   height: 15px;
   width: 15px;
   cursor: pointer;
+  transition: transform 0.2s ease;
 
   svg {
     height: 10px;
@@ -120,6 +124,27 @@ const TriangleBadge = styled.div`
   &:hover {
     opacity: 1;
     transition: opacity 0.2s ease;
+  }
+
+  &:first-child {
+    transform: translate(-13px, -15px);
+    &:hover {
+      transform: scale(1.3) translate(-11px, -10px);
+    }
+  }
+  &:last-child {
+    transform: translateX(-13px);
+    &:hover {
+      transform: scale(1.3) translate(-11px, -2px);
+    }
+  }
+
+  @keyframes scalePlus {
+    100% {
+      transform: translate(-19px, -15px);
+      height: 21px;
+      width: 21px;
+    }
   }
 `;
 
