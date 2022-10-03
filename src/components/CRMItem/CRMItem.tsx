@@ -16,18 +16,7 @@ const CRMItemMemo = ({
   index: number;
   color: string;
 }) => {
-  const [textClass, setTextClass] = useState("");
   const [showModal, setShowModal] = useState(false);
-
-  useEffect(() => {
-    setTextClass("flick");
-
-    const timeout = setTimeout(() => {
-      setTextClass("");
-    }, 500);
-
-    return () => clearTimeout(timeout);
-  }, [item.status]);
 
   return (
     <>
@@ -36,34 +25,28 @@ const CRMItemMemo = ({
           if (snapshot.isDragging) setShowModal(false);
 
           return (
-            <>
-              <ColItemContainer
-                {...provided.draggableProps}
-                {...provided.dragHandleProps}
-                ref={provided.innerRef}
-                isDragging={snapshot.isDragging}
-                onClick={() => setShowModal(!showModal)}
-                color={color}
-              >
-                <div>
-                  <ItemName>{item.name}</ItemName>
-                  <UpperContainer>
-                    <PriceContainer>
-                      {item.price} {item.currency}
-                    </PriceContainer>
-                    <FlickingText className={textClass}>
-                      {item.status}
-                    </FlickingText>
-                  </UpperContainer>
-                  <DateContainer>{getDate(item.date)}</DateContainer>
-                  <div>
-                    Client{item.client.length > 1 && "s"}:{" "}
-                    {item.client.map((client) => client.name)}
-                  </div>
-                </div>
-              </ColItemContainer>
-              {snapshot.isDraggingOver && <div>ASFLASPFASPLGPAS</div>}
-            </>
+            <ColItemContainer
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              ref={provided.innerRef}
+              isDragging={snapshot.isDragging}
+              onClick={() => setShowModal(!showModal)}
+              color={color}
+              style={{
+                ...provided.draggableProps.style,
+                transitionDuration: `0.001s`,
+              }}
+            >
+              <div>
+                <ItemName>{item.name}</ItemName>
+                <UpperContainer>
+                  <PriceContainer>
+                    {item.price} {item.currency}
+                  </PriceContainer>
+                </UpperContainer>
+                <DateContainer>{getDate(item.date)}</DateContainer>
+              </div>
+            </ColItemContainer>
           );
         }}
       </Draggable>
@@ -105,35 +88,6 @@ const ColItemContainer = styled.div<{ isDragging: boolean; color: string }>`
 
   &:first-child {
     margin-top: 0;
-  }
-`;
-
-const FlickKeyframe = keyframes`
-  0% {
-    opacity: 0;
-  }
-
-  30% {
-    opacity: 0.8;
-  }
-
-  60% {
-    opacity: 0.8;
-  }
-
-  100% {
-    opacity: 0;
-  }
-`;
-
-const FlickingText = styled.div`
-  opacity: 0;
-  text-transform: uppercase;
-  color: ${({ theme }) => theme.colors.danger};
-  font-weight: bold;
-
-  &.flick {
-    animation: ${FlickKeyframe} 0.5s alternate;
   }
 `;
 

@@ -138,6 +138,20 @@ const boardsSlice = createSlice({
     updateBoards(state, action: PayloadAction<IInitialState>) {
       return action.payload;
     },
+    addItemToBoard(state, action: PayloadAction<IDeal>) {
+      return {
+        ...state,
+        items: [
+          ...state.items,
+          { ...action.payload, price: Number(action.payload.price) },
+        ],
+        boards: state.boards.map((board) =>
+          board.type === action.payload.status
+            ? { ...board, items: [...board.items, action.payload.id] }
+            : board
+        ),
+      };
+    },
   },
   extraReducers(builder) {
     builder.addCase(updateBoardsAsync.fulfilled, (state, action) => {
@@ -148,4 +162,4 @@ const boardsSlice = createSlice({
 });
 
 export default boardsSlice.reducer;
-export const { updateBoards } = boardsSlice.actions;
+export const { updateBoards, addItemToBoard } = boardsSlice.actions;

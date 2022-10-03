@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd-next";
 import styled, { css } from "styled-components";
 
-import { CRMItem } from "@/src/components";
+import { AddItemComponent, CRMItem } from "@/src/components";
 
 import { ICRMColProps } from "./interfaces";
 
@@ -35,31 +35,35 @@ export default function CRMCol({
             <TotalPrice>
               {items.reduce((acc, item) => acc + item.price, 0)} BYN
             </TotalPrice>
-            <Droppable droppableId={board.id} type="task">
-              {(provided, snapshot) => (
-                <ItemsContainer
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  isDraggingOver={snapshot.isDraggingOver}
-                >
-                  {!!items?.length &&
-                    items.map((item, index) => (
-                      <CRMItem
-                        item={item}
-                        key={item.id}
-                        index={index}
-                        color={board.titleColor}
-                      />
-                    ))}
-                  {snapshot.isDraggingOver && (
-                    <ItemSkeleton isDoubleMargin={items.length >= 1}>
-                      +
-                    </ItemSkeleton>
-                  )}
-                  {provided.placeholder}
-                </ItemsContainer>
-              )}
-            </Droppable>
+
+            <MainContainer>
+              <AddItemContainer boardType={board.type} />
+
+              <Droppable droppableId={board.id} type="task">
+                {(provided, snapshot) => (
+                  <ItemsContainer
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    isDraggingOver={snapshot.isDraggingOver}
+                  >
+                    {!!items?.length &&
+                      items.map((item, index) => (
+                        <CRMItem
+                          item={item}
+                          key={item.id}
+                          index={index}
+                          color={board.titleColor}
+                        />
+                      ))}
+
+                    {snapshot.isDraggingOver && (
+                      <ItemSkeleton isDoubleMargin={items.length >= 1} />
+                    )}
+                    {provided.placeholder}
+                  </ItemsContainer>
+                )}
+              </Droppable>
+            </MainContainer>
           </ColContainer>
         );
       }}
@@ -67,13 +71,31 @@ export default function CRMCol({
   );
 }
 
+const AddItemContainer = ({ boardType }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <AddItemButton
+        className="add-button"
+        onClick={() => setIsOpen(true)}
+        isOpen={isOpen}
+      >
+        +
+      </AddItemButton>
+      <AddItemComponent
+        boardType={boardType}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      />
+    </>
+  );
+};
+
 const ItemSkeleton = styled.div<{ isDoubleMargin: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: ${({ theme }) => theme.colors.white};
-  font-size: 36px;
-  font-weight: bold;
   width: 100%;
   height: 100px;
   background: ${({ theme }) => theme.colors.transparentItem};
@@ -109,8 +131,8 @@ const ColTitle = styled.div`
 const ColContainer = styled.div`
   display: flex;
   flex-direction: column;
-  /* width: 250px; */
-  min-width: 300px;
+  min-width: 350px;
+  max-width: 350px;
   height: 100%;
   margin-right: 2px;
 `;
@@ -158,4 +180,34 @@ const TotalPrice = styled.div`
   font-size: 26px;
   margin: 10px 0;
   color: ${({ theme }) => theme.colors.pageColor};
+`;
+
+const AddItemButton = styled.div<{ isOpen?: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  background-color: ${({ theme, isOpen }) =>
+    isOpen ? theme.colors.blue1 : theme.colors.transparentItem};
+  opacity: 0.8;
+  height: 30px;
+  width: 95%;
+  color: ${({ theme }) => theme.colors.white};
+  transition: 0.1s ease-in;
+  cursor: pointer;
+`;
+
+const MainContainer = styled.div`
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  align-items: center;
+
+  &:hover {
+    & > .add-button {
+      opacity: 1;
+    }
+  }
 `;

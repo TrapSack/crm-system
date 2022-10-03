@@ -18,6 +18,8 @@ declare module "styled-components" {
       danger: string;
       lightGreen1: string;
       lightGreen1Hover: string;
+      blue1: string;
+      blue1Hover: string;
     };
   }
   export type LightTheme = {

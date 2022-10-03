@@ -10,3 +10,4 @@ export { default as CRMTable } from "./CRMTable";
 export { default as DealInfoModal } from "./DealInfoModal";
 export { default as CRMCol } from "./CRMCol";
 export { default as CRMItem } from "./CRMItem";
+export { default as AddItemComponent } from "./AddItemComponent";

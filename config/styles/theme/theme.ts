@@ -17,6 +17,8 @@ const theme: DefaultTheme = {
     danger: "#871205",
     lightGreen1: "#86E630",
     lightGreen1Hover: "#8CF233",
+    blue1: "#3bc8f5",
+    blue1Hover: "#3eddff",
   },
 };
 
