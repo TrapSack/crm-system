@@ -35,6 +35,17 @@ export default function AddItemComponent({ boardType, setIsOpen, isOpen }) {
     client: [{ id: nanoid(), name: "" }],
   });
 
+  const resetItem = () =>
+    setItem({
+      id: "",
+      currency: "BYN",
+      name: "",
+      date: getCurrentDateString(),
+      price: 0.0,
+      status: boardType,
+      client: [{ id: nanoid(), name: "" }],
+    });
+
   const onChangeInputName = (value) =>
     setItem((prev) => ({
       ...prev,
@@ -51,28 +62,12 @@ export default function AddItemComponent({ boardType, setIsOpen, isOpen }) {
 
   const onSubmit = () => {
     dispatch(addItemToBoard({ ...item, id: nanoid() }));
-    setItem({
-      id: "",
-      currency: "BYN",
-      name: "",
-      date: getCurrentDateString(),
-      price: 0.0,
-      status: boardType,
-      client: [{ id: nanoid(), name: "" }],
-    });
+    resetItem();
     setIsOpen(false);
   };
 
   const onClose = () => {
-    setItem({
-      id: "",
-      currency: "BYN",
-      name: "",
-      date: getCurrentDateString(),
-      price: 0.0,
-      status: boardType,
-      client: [{ id: nanoid(), name: "" }],
-    });
+    resetItem();
     setIsOpen(false);
   };
 
