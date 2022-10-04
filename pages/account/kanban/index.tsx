@@ -1,5 +1,8 @@
+import withAuth from "@/src/HOCs/withAuth";
 import KanBanPage from "@/src/pages/KanBanPage";
 
-export default function Page() {
+function Page() {
   return <KanBanPage />;
 }
+
+export default withAuth(Page);

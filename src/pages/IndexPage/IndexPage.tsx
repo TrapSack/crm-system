@@ -13,6 +13,8 @@ export default function IndexPage() {
           <h2 data-text="CRM System">CRM System</h2>
         </MainTitle>
         <Link href="account/kanban">To Kanban </Link>
+        <Link href="/login">Login</Link>
+        <Link href="/login">Register</Link>
       </MainContainer>
     </PageContainer>
   );

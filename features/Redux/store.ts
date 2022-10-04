@@ -4,6 +4,7 @@ import { createWrapper } from "next-redux-wrapper";
 import boardsReducer from "./slices/boardsSlice";
 import notificationReducer from "./slices/notificationSlice";
 import themeReducer from "./slices/theme-slice";
+import userReducer from "./slices/userSlice";
 
 const makeStore = () =>
   configureStore({
@@ -11,6 +12,7 @@ const makeStore = () =>
       theme: themeReducer,
       boards: boardsReducer,
       notifications: notificationReducer,
+      user: userReducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({ serializableCheck: false }),
