@@ -5,7 +5,8 @@ import styled from "styled-components";
 
 import { useAppDispatch, useSelector } from "@/features/hooks";
 import {
-  addBoard,
+  addBoardAsync,
+  removeBoard,
   updateBoards,
   updateBoardTitle,
 } from "@/features/Redux/slices/boardsSlice";
@@ -131,11 +132,13 @@ export default function CRMTable() {
 
     newBoardsOrder.splice(prevBoardIndex + 1, 0, newBoard.id);
 
-    dispatch(addBoard({ board: newBoard, newBoardsOrder }));
+    dispatch(addBoardAsync({ board: newBoard, newBoardsOrder }));
   };
 
   const onChangeColTitle = (id, title) =>
     dispatch(updateBoardTitle({ id, title }));
+
+  const onRemoveCol = (board: IBoard) => dispatch(removeBoard({ board }));
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -157,6 +160,7 @@ export default function CRMTable() {
                   index={index}
                   addNewBoard={addNewBoard}
                   onChangeColTitle={onChangeColTitle}
+                  onRemoveCol={onRemoveCol}
                 />
               );
             })}

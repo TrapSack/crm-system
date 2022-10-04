@@ -48,7 +48,7 @@ const CRMItemMemo = ({
       </Draggable>
       <DealInfoModal
         currency={item.currency}
-        customers={item.client}
+        customers={item.clients}
         id={item.id}
         price={item.price}
         show={showModal}

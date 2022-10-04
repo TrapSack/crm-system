@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
+import SingleModal from "@/src/modal/SingleModal";
+
 import ButtonWithSelect from "../ButtonWithSelect";
 import CRMTable from "../CRMTable";
 import Input from "../Input";
@@ -43,4 +45,12 @@ const Title = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 25px;
+`;
+
+const ModalContent = styled.div`
+  display: flex;
+  padding: 10px;
+  min-height: 50px;
+  background: green;
+  float: right;
 `;

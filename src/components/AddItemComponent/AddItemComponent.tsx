@@ -14,25 +14,30 @@ import { getCurrentDateString } from "@/features/helpers/getCurrentDateString";
 import { useAppDispatch } from "@/features/hooks";
 import { addItemToBoard } from "@/features/Redux/slices/boardsSlice";
 import { IClient } from "@/models/client";
-import { IDeal } from "@/models/single-deal";
 
 import Button from "../Button";
+
+import { IFormDeal } from "./interfaces";
 
 // TODO: Replace with useForm
 //       Add validation
 //       Add memo: complete
 
-export default function AddItemComponent({ boardType, setIsOpen, isOpen }) {
+export default function AddItemComponent({
+  boardType = null,
+  setIsOpen = null,
+  isOpen = null,
+}) {
   const dispatch = useAppDispatch();
 
-  const [item, setItem] = useState<IDeal>({
+  const [item, setItem] = useState<IFormDeal>({
     id: "",
     currency: "BYN",
     name: "",
     date: getCurrentDateString(),
-    price: 0.0,
-    status: boardType,
-    client: [{ id: nanoid(), name: "" }],
+    price: "0.0",
+    status: boardType ?? "new",
+    clients: [{ id: nanoid(), name: "" }],
   });
 
   const resetItem = () =>
@@ -41,9 +46,9 @@ export default function AddItemComponent({ boardType, setIsOpen, isOpen }) {
       currency: "BYN",
       name: "",
       date: getCurrentDateString(),
-      price: 0.0,
-      status: boardType,
-      client: [{ id: nanoid(), name: "" }],
+      price: "0.0",
+      status: boardType ?? "new",
+      clients: [{ id: nanoid(), name: "" }],
     });
 
   const onChangeInputName = (value) =>
@@ -61,9 +66,17 @@ export default function AddItemComponent({ boardType, setIsOpen, isOpen }) {
       : null;
 
   const onSubmit = () => {
-    dispatch(addItemToBoard({ ...item, id: nanoid() }));
-    resetItem();
-    setIsOpen(false);
+    if (
+      item.clients.every((client) => client.name) &&
+      item.name &&
+      Number(item.price) !== 0
+    ) {
+      dispatch(
+        addItemToBoard({ ...item, id: nanoid(), price: Number(item.price) })
+      );
+      resetItem();
+      setIsOpen(false);
+    }
   };
 
   const onClose = () => {
@@ -106,7 +119,7 @@ export default function AddItemComponent({ boardType, setIsOpen, isOpen }) {
             />
           </DualItems>
         </Field>
-        <ClientSelectMemo clients={item.client} setItem={setItem} />
+        <ClientSelectMemo clients={item.clients} setItem={setItem} />
       </div>
       <ButtonContainer>
         <Button buttonType="blue" onClick={onSubmit}>
@@ -122,10 +135,10 @@ export default function AddItemComponent({ boardType, setIsOpen, isOpen }) {
 
 const SelectContainer = ({
   selectedCurrency = null,
-  setItem,
+  setItem = null,
 }: {
   selectedCurrency: string;
-  setItem: Dispatch<SetStateAction<IDeal>>;
+  setItem: Dispatch<SetStateAction<IFormDeal>>;
 }) => {
   const [showItems, setShowItems] = useState(false);
   const dropdownitems = ["BYN", "USD", "RUB", "EUR"];
@@ -160,28 +173,28 @@ const SelectContainer = ({
 const SelectContainerMemo = memo(SelectContainer);
 
 const ClientSelect = ({
-  clients,
-  setItem,
+  clients = null,
+  setItem = null,
 }: {
   clients: IClient[];
-  setItem: Dispatch<SetStateAction<IDeal>>;
+  setItem: Dispatch<SetStateAction<IFormDeal>>;
 }) => {
   const addClient = () =>
     setItem((prev) => ({
       ...prev,
-      client: [...clients, { id: nanoid(), name: "" }],
+      clients: [...clients, { id: nanoid(), name: "" }],
     }));
 
   const removeClient = (id: string) =>
     setItem((prev) => ({
       ...prev,
-      client: prev.client.filter((client) => client.id !== id),
+      clients: prev.clients.filter((client) => client.id !== id),
     }));
 
   const onChangeClientName = (id, value) =>
     setItem((prev) => ({
       ...prev,
-      client: prev.client.map((client) =>
+      clients: prev.clients.map((client) =>
         client.id === id ? { ...client, name: value } : client
       ),
     }));
@@ -189,36 +202,37 @@ const ClientSelect = ({
   return (
     <ClientSelectContainer>
       <FieldLabel>Client</FieldLabel>
-      {clients.map((client) => (
-        <ClientCardContainer key={client.id}>
-          <ClientInputContainer>
-            <IconContainer>
-              <FontAwesomeIcon
-                icon={faUserCircle}
-                color={theme.colors.lightGray3}
+      {!!clients?.length &&
+        clients.map((client) => (
+          <ClientCardContainer key={client.id}>
+            <ClientInputContainer>
+              <IconContainer>
+                <FontAwesomeIcon
+                  icon={faUserCircle}
+                  color={theme.colors.lightGray3}
+                />
+              </IconContainer>
+              <input
+                type="text"
+                name=""
+                id=""
+                placeholder="Name"
+                onChange={(e) => onChangeClientName(client.id, e.target.value)}
               />
-            </IconContainer>
-            <input
-              type="text"
-              name=""
-              id=""
-              placeholder="Name"
-              onChange={(e) => onChangeClientName(client.id, e.target.value)}
-            />
-            <IconContainer>
-              <FontAwesomeIcon
-                icon={faSearch}
-                color={theme.colors.lightGray3}
-              />
-            </IconContainer>
-          </ClientInputContainer>
-          {clients.length > 1 && (
-            <DeleteClientButton onClick={() => removeClient(client.id)}>
-              <FontAwesomeIcon icon={faXmark} />
-            </DeleteClientButton>
-          )}
-        </ClientCardContainer>
-      ))}
+              <IconContainer>
+                <FontAwesomeIcon
+                  icon={faSearch}
+                  color={theme.colors.lightGray3}
+                />
+              </IconContainer>
+            </ClientInputContainer>
+            {clients.length > 1 && (
+              <DeleteClientButton onClick={() => removeClient(client.id)}>
+                <FontAwesomeIcon icon={faXmark} />
+              </DeleteClientButton>
+            )}
+          </ClientCardContainer>
+        ))}
 
       <AddClientLink onClick={() => addClient()}>+ Add client</AddClientLink>
     </ClientSelectContainer>

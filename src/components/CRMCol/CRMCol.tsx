@@ -13,6 +13,7 @@ function CRMColMemo({
   index = null,
   onChangeColTitle = null,
   addNewBoard = null,
+  onRemoveCol = null,
 }: ICRMColProps) {
   return (
     <Draggable draggableId={board.id} index={index}>
@@ -29,6 +30,7 @@ function CRMColMemo({
               provided={provided}
               snapshot={snapshot}
               onChangeColTitle={onChangeColTitle}
+              onRemoveCol={onRemoveCol}
             />
             <TotalPrice>
               {items.reduce((acc, item) => acc + item.price, 0)} BYN

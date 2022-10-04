@@ -14,6 +14,7 @@ export default function ColumnTitle({
   board,
   addNewBoard,
   onChangeColTitle,
+  onRemoveCol,
 }) {
   const [showRenameColTitle, setShowRenameColTitle] = useState(false);
   const [newTitle, setNewTitle] = useState(board.title);
@@ -59,7 +60,7 @@ export default function ColumnTitle({
         <TriangleBadge onClick={() => addNewBoard(board.id)}>
           <FontAwesomeIcon icon={faPlus} />
         </TriangleBadge>
-        <TriangleBadge onClick={() => addNewBoard(board.id)}>
+        <TriangleBadge onClick={() => onRemoveCol(board)}>
           <FontAwesomeIcon icon={faMinus} />
         </TriangleBadge>
       </Triangle>
@@ -74,6 +75,7 @@ const ColTitle = styled.div`
   height: 30px;
   transition: background-color 0.1s ease-in;
   border-radius: 4px;
+  cursor: default !important;
 `;
 
 const Triangle = styled.div<{ isDragging: boolean; titleColor: string }>`

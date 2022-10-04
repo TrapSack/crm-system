@@ -19,6 +19,7 @@ const theme: DefaultTheme = {
     lightGreen1Hover: "#8CF233",
     blue1: "#3bc8f5",
     blue1Hover: "#3eddff",
+    successNotification: "#4CAF50",
   },
 };
 

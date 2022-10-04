@@ -20,6 +20,7 @@ declare module "styled-components" {
       lightGreen1Hover: string;
       blue1: string;
       blue1Hover: string;
+      successNotification: string;
     };
   }
   export type LightTheme = {

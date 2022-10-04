@@ -78,7 +78,7 @@ export default function Navbar() {
 
 const Nav = styled.nav`
   position: relative;
-  z-index: 10000;
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: space-between;

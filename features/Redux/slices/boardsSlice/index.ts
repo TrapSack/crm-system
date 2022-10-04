@@ -1,104 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { nanoid } from "nanoid";
 
 import theme from "@/config/styles/theme";
 import type { IBoard } from "@/models/board";
 import { IDeal } from "@/models/single-deal";
 
+import { addNotification } from "../notificationSlice";
+
 import { IInitialState } from "./interfaces";
-
-export const updateBoardsAsync = createAsyncThunk(
-  "boards/updateAsync",
-  async (data) => {
-    return data;
-  }
-);
-
-const items: IDeal[] = [
-  {
-    id: "deal-1",
-    currency: "BYN",
-    price: 50,
-    name: "213",
-    date: "09-16-22",
-    status: "documents",
-    client: [
-      {
-        id: "5",
-        name: "sasha",
-      },
-    ],
-  },
-  {
-    id: "deal-2",
-    currency: "BYN",
-    price: 50,
-    name: "bebra 1221",
-    date: "09-16-22",
-    status: "final",
-    client: [
-      {
-        id: "5",
-        name: "sasha",
-      },
-    ],
-  },
-  {
-    id: "deal-3",
-    currency: "BYN",
-    name: "bebra 2",
-    date: "09-16-22",
-    price: 50,
-    status: "in work",
-    client: [
-      {
-        id: "5",
-        name: "sasha",
-      },
-    ],
-  },
-  {
-    id: "deal-4",
-    currency: "BYN",
-    price: 50,
-    name: "bebra3",
-    date: "09-16-22",
-    status: "preorder",
-    client: [
-      {
-        id: "5",
-        name: "sasha",
-      },
-    ],
-  },
-  {
-    id: "deal-5",
-    currency: "BYN",
-    name: "21362",
-    date: "09-16-22",
-    price: 50,
-    status: "documents",
-    client: [
-      {
-        id: "5",
-        name: "sasha",
-      },
-    ],
-  },
-  {
-    id: "deal-6",
-    currency: "BYN",
-    price: 50,
-    name: "213",
-    date: "09-16-22",
-    status: "new",
-    client: [
-      {
-        id: "5",
-        name: "sasha",
-      },
-    ],
-  },
-];
 
 const boards: IBoard[] = [
   { title: "Documents", type: "documents", titleColor: "#B3F08D" },
@@ -122,15 +31,30 @@ const boards: IBoard[] = [
   title: board.title,
   type: board.type,
   titleColor: board.titleColor ?? theme.colors.lightGray1,
-  items: items
-    .filter((item) => item.status === board.type)
-    .map((item) => item.id),
+  items: [],
 }));
+
+export const addBoardAsync = createAsyncThunk(
+  "boards/create",
+  async (data: { newBoardsOrder: string[]; board: IBoard }, { dispatch }) => {
+    dispatch(
+      addBoard({ board: data.board, newBoardsOrder: data.newBoardsOrder })
+    );
+    dispatch(
+      addNotification({
+        id: nanoid(),
+        status: "success",
+        title: "Success",
+        description: "Column created",
+      })
+    );
+  }
+);
 
 const boardsSlice = createSlice({
   name: "boards",
   initialState: {
-    items: items,
+    items: [],
     boards: boards,
     boardsOrder: boards.map((board) => board.id),
   } as IInitialState,
@@ -146,6 +70,19 @@ const boardsSlice = createSlice({
         ...state,
         boards: [...state.boards, action.payload.board],
         boardsOrder: action.payload.newBoardsOrder,
+      };
+    },
+    removeBoard(state, action: PayloadAction<{ board: IBoard }>) {
+      return {
+        items: state.items.filter(
+          (item) => item.status !== action.payload.board.type
+        ),
+        boards: state.boards.filter(
+          (board) => board.id !== action.payload.board.id
+        ),
+        boardsOrder: state.boardsOrder.filter(
+          (item) => item !== action.payload.board.id
+        ),
       };
     },
     updateBoardTitle(
@@ -179,14 +116,13 @@ const boardsSlice = createSlice({
       };
     },
   },
-  extraReducers(builder) {
-    builder.addCase(updateBoardsAsync.fulfilled, (state, action) => {
-      console.log(action.payload);
-      return action.payload;
-    });
-  },
 });
 
 export default boardsSlice.reducer;
-export const { updateBoards, addItemToBoard, addBoard, updateBoardTitle } =
-  boardsSlice.actions;
+export const {
+  updateBoards,
+  addItemToBoard,
+  addBoard,
+  updateBoardTitle,
+  removeBoard,
+} = boardsSlice.actions;

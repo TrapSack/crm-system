@@ -7,4 +7,5 @@ export interface ICRMColProps {
   index: number;
   onChangeColTitle: (id: string, title: string) => void;
   addNewBoard: (prevBoardId: string) => void;
+  onRemoveCol: (board: IBoard) => void;
 }

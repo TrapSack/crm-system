@@ -1,8 +1,8 @@
-import { IClient } from "./client";
+import { IClient } from "@/models/client";
 
-export interface IDeal {
+export interface IFormDeal {
   id: string;
-  price: number;
+  price: string;
   name: string;
   date: `${string}-${string}-${string}`;
   currency: string;

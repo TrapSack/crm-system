@@ -6,8 +6,10 @@ import { ThemeProvider } from "styled-components";
 
 import GlobalStyles from "@/config/styles/global";
 import theme from "@/config/styles/theme";
+import { ModalProvider } from "@/features/context/ModalContext";
 import { wrapper } from "@/features/Redux/store";
 import { Navbar } from "@/src/components";
+import NotificationModal from "@/src/modal/NotificationModal";
 
 function App({ Component, pageProps }: AppProps) {
   const [mounted, setMounted] = useState(false);
@@ -16,15 +18,18 @@ function App({ Component, pageProps }: AppProps) {
 
   return (
     <ThemeProvider theme={theme}>
-      <GlobalStyles />
-      <NextNProgress
-        color={theme.colors.mainColor3}
-        options={{ showSpinner: true }}
-      />
-      <div style={{ visibility: !mounted ? "hidden" : "visible" }}>
-        <Navbar />
-        <Component {...pageProps} />
-      </div>
+      <ModalProvider>
+        <GlobalStyles />
+        <NextNProgress
+          color={theme.colors.mainColor3}
+          options={{ showSpinner: true }}
+        />
+        <div style={{ visibility: !mounted ? "hidden" : "visible" }}>
+          <Navbar />
+          <Component {...pageProps} />
+        </div>
+      </ModalProvider>
+      <NotificationModal />
     </ThemeProvider>
   );
 }
